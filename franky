@@ -13,6 +13,44 @@ echo "📦 Installing ethers v5.5.1..."
 npm install ethers@5.5.1
 echo "✅ Ethers v5.5.1 installed"
 
+# Update config.yaml with custom settings
+echo "🔧 Updating configuration settings..."
+if [ -f "config.yaml" ]; then
+    # Create backup of original config
+    cp config.yaml config.yaml.backup
+    
+    # Update specific settings in config.yaml
+    # Set listen to true
+    sed -i 's/listen: false/listen: true/' config.yaml
+    
+    # Set port to 8000
+    sed -i 's/port: [0-9]*/port: 8000/' config.yaml
+    
+    # Set whitelistMode to false
+    sed -i 's/whitelistMode: true/whitelistMode: false/' config.yaml
+    
+    # Set securityOverride to true
+    sed -i 's/securityOverride: false/securityOverride: true/' config.yaml
+    
+    # Set disableCsrfProtection to true
+    sed -i 's/disableCsrfProtection: false/disableCsrfProtection: true/' config.yaml
+    
+    echo "✅ Configuration updated successfully"
+else
+    echo "⚠️ config.yaml not found. Creating with custom settings..."
+    
+    # Create minimal config.yaml with only the required settings
+    cat > config.yaml << 'EOL'
+# SillyTavern configuration
+listen: true
+port: 8000
+whitelistMode: false
+securityOverride: true
+disableCsrfProtection: true
+EOL
+    echo "✅ Custom config.yaml created"
+fi
+
 # Function to start SillyTavern with Ollama and ngrok
 start_sillytavern() {
     echo "🚀 Starting SillyTavern with Ollama and ngrok support..."
