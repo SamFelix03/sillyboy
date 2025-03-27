@@ -3,36 +3,15 @@
 # Franky - Combined script for SillyTavern with Ollama, ngrok, and wallet creation
 # Usage: franky start
 
-# Check if package.json exists, if not create it
-if [ ! -f "package.json" ]; then
-    echo "📦 Creating package.json..."
-    cat > package.json << 'EOL'
-{
-  "name": "franky",
-  "version": "1.0.0",
-  "description": "SillyTavern with Ollama and wallet integration",
-  "main": "server.js",
-  "dependencies": {
-    "ethers": "5.5.1"
-  }
-}
-EOL
-    echo "✅ Created package.json"
-    
-    # Install dependencies
-    echo "📦 Installing dependencies..."
-    npm install
-    echo "✅ Dependencies installed"
-else
-    # Check if ethers is in dependencies
-    if ! grep -q '"ethers"' package.json; then
-        echo "📦 Adding ethers to dependencies..."
-        # Use temporary file to avoid issues with inline editing
-        jq '.dependencies.ethers = "5.5.1"' package.json > package.json.tmp && mv package.json.tmp package.json
-        npm install
-        echo "✅ Added ethers dependency"
-    fi
-fi
+# Install all dependencies
+echo "📦 Installing dependencies..."
+npm install
+echo "✅ Dependencies installed"
+
+# Install ethers specifically
+echo "📦 Installing ethers v5.5.1..."
+npm install ethers@5.5.1
+echo "✅ Ethers v5.5.1 installed"
 
 # Function to start SillyTavern with Ollama and ngrok
 start_sillytavern() {
